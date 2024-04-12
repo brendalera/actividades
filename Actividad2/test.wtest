@@ -1,0 +1,9 @@
+import spa.*
+import example.*
+
+test "ramiro.relajado"{
+	spa.atender(ramiro)
+	assert.notThat(ramiro.pielGrasosa())
+}
+
+
