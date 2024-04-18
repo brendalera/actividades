@@ -1,0 +1,108 @@
+import remiseras.*
+
+//Roxana : una Ludmila 180 pesos (18*10), una Ana María 300, una Teresa 220.
+//Gabriela : una Ludmila 216 pesos (180*1.2), una Ana María 360, una Teresa 264.
+//Mariela : lo mismo que Roxana.
+//Juana : 200 pesos a todos.
+
+test "Roxana : una Ludmila 180 pesos (18*10), una Ana María 300, una Teresa 220."{
+	assert.equals(180, roxana.precioViaje(ludmila,10))
+	assert.equals(300, roxana.precioViaje(anaMaria,10))
+	assert.equals(220, roxana.precioViaje(teresa,10))
+}
+
+test "Gabriela : una Ludmila 216 pesos (180*1.2), una Ana María 360, una Teresa 264."{
+	assert.equals(216, gabriela.precioViaje(ludmila,10))
+	assert.equals(360, gabriela.precioViaje(anaMaria,10))
+	assert.equals(264, gabriela.precioViaje(teresa,10))
+}
+
+test "Mariela : lo mismo que Roxana."{
+	assert.equals(180, mariela.precioViaje(ludmila,10))
+	assert.equals(300, roxana.precioViaje(anaMaria,10))
+	assert.equals(220, roxana.precioViaje(teresa,10))
+}
+
+test "Juana : 200 pesos a todos."{
+	assert.equals(200, juana.precioViaje(ludmila,10))
+	assert.equals(200, juana.precioViaje(anaMaria,10))
+	assert.equals(200, juana.precioViaje(teresa,10))
+}
+
+//Roxana : una Ludmila 36 pesos (18*2), una Ana María 60, una Teresa 44.
+//Gabriela : a Ludmila 43.20 pesos (36*1.2), a Ana María 72, a Teresa 52.80.
+//Mariela : a Ludmila y Teresa 50 pesos que es el mínimo, a Ana María 60.
+//Juana : 100 pesos a todos.
+
+test "Roxana : una Ludmila 36 pesos (18*2), una Ana María 60, una Teresa 44."{
+	assert.equals(36, roxana.precioViaje(ludmila, 2))
+	assert.equals(60, roxana.precioViaje(anaMaria, 2))
+	assert.equals(44, roxana.precioViaje(teresa, 2))
+}
+
+test "Gabriela : a Ludmila 43.20 pesos (36*1.2), a Ana María 72, a Teresa 52.80."{
+	assert.equals(43.2, gabriela.precioViaje(ludmila, 2))
+	assert.equals(72, gabriela.precioViaje(anaMaria, 2))
+	assert.equals(52.8, gabriela.precioViaje(teresa, 2))
+}
+
+test "Mariela : a Ludmila y Teresa 50 pesos que es el mínimo, a Ana María 60."{
+	assert.equals(50, mariela.precioViaje(ludmila, 2))
+	assert.equals(60, mariela.precioViaje(anaMaria, 2))
+	assert.equals(50, mariela.precioViaje(teresa, 2))
+}
+
+test "Juana : 100 pesos a todos."{
+	assert.equals(100, juana.precioViaje(ludmila, 2))
+	assert.equals(100, juana.precioViaje(anaMaria, 2))
+	assert.equals(100, juana.precioViaje(teresa, 2))
+}
+
+//P.ej. si Lucía está reemplazando a Mariela, y Melina está trabajando para Ludmila, entonces:
+//por un viaje de 10 kilómetros Lucía le cobra a Melina 150 pesos (el precio por kilómetro es
+//15, tres menos que lo que se pactó con Ludmila).
+//por un viaje de 1 kilómetro le va a cobrar 50 pesos, que es el mínimo que establece Mariela.
+//Si en cambio Lucía está reemplazando a Gabriela, y manteniendo que Melina trabaja para Ludmila,
+//entonces los valores para 10 y 1 km son 180 y 18, porque corre el 20% de recarga que establece
+//Gabriela.
+
+test "Por un viaje de 10 kilómetros Lucía (reemplaza a Mariela) le cobra a Melina 150 pesos, que trabaja para ludmila."{
+	melina.trabajarPara(ludmila)
+	assert.equals(150,lucia.reemplazarRemisera(mariela,ludmila,10))
+}
+
+test "por un viaje de 1 kilómetro le va a cobrar 50 pesos, que es el mínimo que establece Mariela."{
+	melina.trabajarPara(ludmila)
+	assert.equals(50,lucia.reemplazarRemisera(mariela,ludmila,1))
+}
+
+test "Lucía está reemplazando a Gabriela, y manteniendo que Melina trabaja para Ludmila, entonces los valores para 10 y 1 km son 180 y 18"{
+	melina.trabajarPara(ludmila)
+	assert.equals(180,lucia.reemplazarRemisera(gabriela,ludmila,10))
+	assert.equals(18,lucia.reemplazarRemisera(gabriela,ludmila,1))
+}
+
+// Supongamos que en un momento dado la remisera de primera opción es Roxana, y la de segunda 
+//opción es Juana. En este caso para un viaje de 10 kilómetros para Ana María, la remisera 
+//elegida es Juana, porque su precio de 200 pesos, es menor al de Roxana (300 pesos), y la 
+//diferencia es de más de 30 pesos.
+//si el viaje es para Teresa, entonces Roxana ofrece 220 pesos y Juana 200. El precio de Juana
+//es menor, pero la diferencia no llega a 30 pesos. Por lo tanto, la remisera elegida es Roxana.
+//si el viaje es de 4 kilómetros para Teresa, entonces Roxana cobra 88 pesos y Juana 100. El 
+//precio de Roxana es menor, por lo tanto Roxana es la elegida.
+
+test "la remisera de primera opción es Roxana, y la de segunda opción es Juana. Para un viaje de 10 kilómetros para Ana María, la remisera 
+elegida es Juana, porque su precio de 200 pesos"{
+	oficina.asignarRemiseras(roxana, juana)
+	assert.equals(juana, oficina.remiseraElegidaParaViaje(anaMaria,10))
+}
+
+test "si el viaje es para Teresa, entonces la remisera elegida es Roxana."{
+	oficina.asignarRemiseras(roxana, juana)
+	assert.equals(roxana, oficina.remiseraElegidaParaViaje(teresa,10))
+}
+
+test "si el viaje es de 4 kilómetros para Teresa, entonces Roxana es la elegida."{
+	oficina.asignarRemiseras(roxana, juana)
+	assert.equals(roxana, oficina.remiseraElegidaParaViaje(teresa,4))
+}
