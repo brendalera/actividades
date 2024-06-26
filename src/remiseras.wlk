@@ -278,3 +278,9 @@ class Magneto inherits Aparato{
 
 	method necesitaMantenimiento() = imantacion < 100
 }
+
+10% = 0.1
+20% = 0.2
+30% = 0.3
+40% = 0.4
+100% = 1
